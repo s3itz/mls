@@ -43,17 +43,20 @@ class ClubStanding(Base):
                            nullable=False)
 
 
-scheduled_game_broadcaster = \
-    Table('scheduled_game_broadcaster',
-          Base.metadata,
-          Column('scheduled_game_id',
-                 Integer,
-                 ForeignKey('scheduled_game.id', ondelete='CASCADE')),
-          Column('broadcaster_id',
-                 Integer,
-                 ForeignKey('broadcaster.id',
-                            ondelete='CASCADE'))
-          )
+scheduled_game_broadcaster = Table(
+    'scheduled_game_broadcaster',
+    Base.metadata,
+    Column('scheduled_game_id',
+           Integer,
+           ForeignKey('scheduled_game.id',
+                      ondelete='CASCADE'),
+           primary_key=True),
+    Column('broadcaster_id',
+           Integer,
+           ForeignKey('broadcaster.id',
+                      ondelete='CASCADE'),
+           primary_key=True)
+)
 
 
 class ScheduledGame(Base):
@@ -76,4 +79,4 @@ class Broadcaster(Base):
     __tablename__ = 'broadcaster'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    name = Column(String, unique=True, nullable=False)
