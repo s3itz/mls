@@ -33,6 +33,8 @@ def scrape_schedule(month, year, competition_type, verbose):
     At this point, this command does not offer an opportunity to update an
     existing database.
     """
+    session.query(Broadcaster).delete()
+    session.query(ScheduledGame).delete()
 
     # scrape season schedule
     # competition_type=46 is MLS Regular Season
@@ -155,6 +157,9 @@ def add_scheduled_games_to_db(games, broadcasters):
 @manager.command
 def scrape_standings():
     """Scrape current MLS standings"""
+    session.query(Conference).delete()
+    session.query(ClubStanding).delete()
+
     url = 'http://www.mlssoccer.com/standings'
 
     r = requests.get(url)
