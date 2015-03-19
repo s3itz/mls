@@ -1,5 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, \
-    Table
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -24,7 +23,7 @@ class ClubStanding(Base):
     name = Column(String, nullable=False)
     points = Column(Float, nullable=False)
     games_played = Column(Integer, nullable=False)
-    pointers_per_game = Column(Float, nullable=False)
+    points_per_game = Column(Float, nullable=False)
     wins = Column(Integer, nullable=False)
     losses = Column(Integer, nullable=False)
     ties = Column(Integer, nullable=False)
@@ -43,20 +42,15 @@ class ClubStanding(Base):
                            nullable=False)
 
 
-scheduled_game_broadcaster = Table(
-    'scheduled_game_broadcaster',
-    Base.metadata,
-    Column('scheduled_game_id',
-           Integer,
-           ForeignKey('scheduled_game.id',
-                      ondelete='CASCADE'),
-           primary_key=True),
-    Column('broadcaster_id',
-           Integer,
-           ForeignKey('broadcaster.id',
-                      ondelete='CASCADE'),
-           primary_key=True)
-)
+class ScheduledGameBroadcaster(Base):
+    __tablename__ = 'scheduled_game_broadcaster'
+
+    scheduled_game_id = Column(Integer, ForeignKey('scheduled_game.id',
+                                                   ondelete='CASCADE'),
+                               primary_key=True)
+    broadcaster_id = Column(Integer, ForeignKey('broadcaster.id',
+                                                ondelete='CASCADE'),
+                            primary_key=True)
 
 
 class ScheduledGame(Base):
@@ -71,7 +65,7 @@ class ScheduledGame(Base):
     matchcenter_url = Column(String, nullable=False)
 
     broadcasters = relationship('Broadcaster',
-                                secondary=scheduled_game_broadcaster,
+                                secondary='scheduled_game_broadcaster',
                                 backref='scheduled_games')
 
 

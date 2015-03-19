@@ -132,10 +132,9 @@ def add_broadcasters_to_db(games):
     for game in games:
         if game['broadcasters']:
             for broadcaster in game['broadcasters']:
-                if broadcaster not in broadcasters.keys():
+                if broadcaster not in broadcasters:
                     broadcaster_db = Broadcaster(name=broadcaster)
                     session.add(broadcaster_db)
-                    session.commit()
                     broadcasters[broadcaster] = broadcaster_db
 
     return broadcasters
@@ -194,7 +193,7 @@ def gather_standings_from_table(table):
         for key, stat in zip(keys, tr.find_all('td')):
             if key == 'club':
                 standing[key] = stat.get_text(strip=True)
-            elif key.endswith('_per_game'):
+            elif key == 'points_per_game':
                 standing[key] = float(stat.get_text(strip=True))
             else:
                 standing[key] = int(stat.get_text(strip=True))
@@ -223,7 +222,7 @@ def make_club_standing_from_object(club, conference):
                         name=club['club'],
                         points=club['points'],
                         games_played=club['games_played'],
-                        pointers_per_game=club['points_per_game'],
+                        points_per_game=club['points_per_game'],
                         wins=club['wins'],
                         losses=club['losses'],
                         ties=club['ties'],
