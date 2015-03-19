@@ -9,9 +9,9 @@ import bs4
 import dateutil.parser
 from flask.ext.script import Manager
 
-from mls_scraper import app
-from mls_scraper.database import session
-from mls_scraper.models import Conference, ClubStanding, Broadcaster, \
+from mls import app
+from mls.database import session
+from mls.models import Conference, ClubStanding, Broadcaster, \
     ScheduledGame
 
 manager = Manager(app)
