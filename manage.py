@@ -22,8 +22,8 @@ manager = Manager(app)
                 choices=['all', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 @manager.option('-y', '--year', help='Year to scrape (default=current)',
                 default=datetime.datetime.now().year,
-                choices=[2014, 2015])
-@manager.option('-c', '--competition-type', help='Competition type',
+                choices=[2014, 2015], type=int)
+@manager.option('-c', '--competition-type', help='Competition type (int)',
                 default=46)
 @manager.option('-v', '--verbose', help='Verbose mode on (default off)',
                 default=False, action='store_true')
@@ -33,10 +33,6 @@ def scrape_schedule(month, year, competition_type, verbose):
     At this point, this command does not offer an opportunity to update an
     existing database.
     """
-    # Drop existing DB rows before building
-    session.query(Broadcaster).delete()
-    session.query(ScheduledGame).delete()
-    session.commit()
 
     # scrape season schedule
     # competition_type=46 is MLS Regular Season
@@ -112,10 +108,10 @@ def scrape_schedule(month, year, competition_type, verbose):
         print(len(broadcasters), 'broadcasters discovered in current schedule.')
 
     add_scheduled_games_to_db(games, broadcasters)
+    session.commit()
 
     if verbose:
-        count = session.query(ScheduledGame).count()
-        count += session.query(Broadcaster).count()
+        count = len(broadcasters) + len(games)
         print('Completed database seed, {} rows created.'.
               format(count))
 
@@ -154,17 +150,11 @@ def add_scheduled_games_to_db(games, broadcasters):
             game_db.broadcasters.append(broadcasters[broadcaster])
 
         session.add(game_db)
-    session.commit()
 
 
 @manager.command
 def scrape_standings():
     """Scrape current MLS standings"""
-    # Drop existing DB rows before building
-    # Dropping conferences will also drop the clubs
-    session.query(Conference).delete()
-    session.commit()
-
     url = 'http://www.mlssoccer.com/standings'
 
     r = requests.get(url)

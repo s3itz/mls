@@ -14,6 +14,13 @@ class Conference(Base):
                          backref='conference',
                          order_by='ClubStanding.rank')
 
+    def as_dictionary(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'clubs': [club.as_dictionary() for club in self.clubs]
+        }
+
 
 class ClubStanding(Base):
     __tablename__ = 'club_standing'
@@ -40,6 +47,26 @@ class ClubStanding(Base):
                                       onupdate='CASCADE',
                                       ondelete='CASCADE'),
                            nullable=False)
+
+    def as_dictionary(self):
+        return {
+            'id': self.id,
+            'rank': self.rank,
+            'name': self.name,
+            'points': self.points,
+            'games_played': self.games_played,
+            'points_per_game': self.points_per_game,
+            'wins': self.wins,
+            'losses': self.losses,
+            'ties': self.ties,
+            'goals_for': self.goals_for,
+            'goals_against': self.goals_against,
+            'goals_difference': self.goals_difference,
+            'home_goals_for': self.home_goals_for,
+            'road_goals': self.road_goals,
+            'road_goals_difference': self.road_goals_difference,
+            'conference_id': self.conference_id
+        }
 
 
 class ScheduledGameBroadcaster(Base):
@@ -68,9 +95,28 @@ class ScheduledGame(Base):
                                 secondary='scheduled_game_broadcaster',
                                 backref='scheduled_games')
 
+    def as_dictionary(self):
+        return {
+            'id': self.id,
+            'time': self.time.isoformat(),
+            'home_team': self.home_team,
+            'home_score': self.home_score,
+            'away_team': self.away_team,
+            'away_score': self.away_score,
+            'matchcenter_url': self.matchcenter_url,
+            'broadcasters': [broadcaster.as_dictionary()
+                             for broadcaster in self.broadcasters]
+        }
+
 
 class Broadcaster(Base):
     __tablename__ = 'broadcaster'
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, nullable=False)
+
+    def as_dictionary(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
