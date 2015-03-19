@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Runs the development server for MLS Scraper."""
+import datetime
 import os
 
 import requests
@@ -16,8 +17,17 @@ from mls_scraper.models import Conference, ClubStanding, Broadcaster, \
 manager = Manager(app)
 
 
-@manager.command
-def scrape_schedule():
+@manager.option('-m', '--month', help='Month to scrape (default=all)',
+                default='all',
+                choices=['all', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+@manager.option('-y', '--year', help='Year to scrape (default=current)',
+                default=datetime.datetime.now().year,
+                choices=[2014, 2015])
+@manager.option('-c', '--competition-type', help='Competition type',
+                default=46)
+@manager.option('-v', '--verbose', help='Verbose mode on (default off)',
+                default=False, action='store_true')
+def scrape_schedule(month, year, competition_type, verbose):
     """Attempts to seed the database with the year's schedule.
 
     At this point, this command does not offer an opportunity to update an
@@ -33,7 +43,13 @@ def scrape_schedule():
     # there is also a param called 'month' which takes an integer argument
     # for the month, or the argument 'all'
     url = 'http://www.mlssoccer.com/schedule'
-    payload = {'month': 'all', 'year': 2015, 'competition_type': 46}
+    payload = {'month': month, 'year': year,
+               'competition_type': competition_type}
+
+    if verbose:
+        query = '{}?month={}&year={}&competition_type={}'.\
+            format(url, month, year, competition_type)
+        print('Processing request', query)
 
     r = requests.get(url, params=payload)
     soup = bs4.BeautifulSoup(r.text)
@@ -66,8 +82,7 @@ def scrape_schedule():
             if td.div:
                 scores = [int(x)
                           for x in td.div.get_text(strip=True).split('-')]
-                # if an MLS team manages to score greater than...
-                # 9?? hahaha never gonna happen!
+                # if a MLS team manages to score greater than 9...
                 game['home_score'] = scores[0]
                 game['away_score'] = scores[1]
 
@@ -88,14 +103,27 @@ def scrape_schedule():
             # index forward
             tr = tr.find_next_sibling('tr')
 
+    if verbose:
+        print('Completed processing request, {} games discovered'.
+              format(len(games)))
+
     broadcasters = add_broadcasters_to_db(games)
+    if verbose:
+        print(len(broadcasters), 'broadcasters discoverd in current schedule.')
+
     add_scheduled_games_to_db(games, broadcasters)
+
+    if verbose:
+        count = session.query(ScheduledGame).count()
+        count += session.query(Broadcaster).count()
+        print('Completed database seed, {} rows created.'.
+              format(count))
 
 
 def add_broadcasters_to_db(games):
     """Use the compiled list of scheduled games to load a dictionary of
     broadcasters for the remainder of the season so we can associate
-    them with the games when we put them into the database
+    them with the games when we put them into the database.
 
     Returns a dictionary of broadcasters ({name: database_object}) for utility.
     """
