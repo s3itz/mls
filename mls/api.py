@@ -16,7 +16,6 @@ def schedule(year=None, month='all'):
     if not year:
         year = datetime.datetime.now().year
 
-    # TODO: 2015 is only officially supported!
     if year not in [2014, 2015]:
         message = '{} is an invalid year for requests.'.format(year)
         data = json.dumps({'message': message})
