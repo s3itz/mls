@@ -109,7 +109,7 @@ def scrape_schedule(month, year, competition_type, verbose):
 
     broadcasters = add_broadcasters_to_db(games)
     if verbose:
-        print(len(broadcasters), 'broadcasters discoverd in current schedule.')
+        print(len(broadcasters), 'broadcasters discovered in current schedule.')
 
     add_scheduled_games_to_db(games, broadcasters)
 
