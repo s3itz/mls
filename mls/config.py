@@ -6,7 +6,8 @@ class Config:
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = os.environ['MLS_CONFIG_SECRET_KEY']
-    SQLALCHEMY_DATABASE_URI = os.environ['MLS_CONFIG_DATABASE_URI']
+    DATABASE_URI = os.environ['MLS_CONFIG_DATABASE_URI']
+    REDIS_URI = os.environ['MLS_CONFIG_REDIS_URI']
 
 
 class DevelopmentConfig(Config):
@@ -19,4 +20,4 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    pass
+    DEBUG = False

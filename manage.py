@@ -27,7 +27,7 @@ manager = Manager(app)
                 default=46)
 @manager.option('-v', '--verbose', help='Verbose mode on (default off)',
                 default=False, action='store_true')
-def scrape_schedule(month, year, competition_type, verbose):
+def scrape_schedule(month='all', year=2015, competition_type=46, verbose=False):
     """Attempts to seed the database with the year's schedule.
 
     At this point, this command does not offer an opportunity to update an
