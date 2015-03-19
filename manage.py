@@ -35,6 +35,7 @@ def scrape_schedule(month='all', year=2015, competition_type=46, verbose=False):
     """
     session.query(Broadcaster).delete()
     session.query(ScheduledGame).delete()
+    session.commit()
 
     # scrape season schedule
     # competition_type=46 is MLS Regular Season
@@ -159,6 +160,7 @@ def scrape_standings():
     """Scrape current MLS standings"""
     session.query(Conference).delete()
     session.query(ClubStanding).delete()
+    session.commit()
 
     url = 'http://www.mlssoccer.com/standings'
 
