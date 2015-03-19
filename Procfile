@@ -1,3 +1,3 @@
-web: python manage.py run
+web: guinocrn mls:app
 worker: python worker.py
 clock: python clock.py
