@@ -15,10 +15,30 @@
 
   app.controller('ScheduleCtrl', function ($scope, $http) {
     var date = new Date();
-    var url = '/schedule/2015/' + (date.getMonth() + 1);
+    var url_root = '/schedule/2015/';
+    var url = url_root + (date.getMonth() + 1); // Date() is based on 0-index.
     $http.get(url)
       .success(function (data) {
-        $scope.schedule = data;
+        $scope.schedule = [];
+        angular.forEach(data, function(game) {
+          var today = new Date();
+          console.log('today:', today);
+          var gameDate = new Date(game.time);
+
+          // games are stored in Eastern time; getUTCDate will give us that
+          // value back... works...
+          if (today.getDate() <= gameDate.getUTCDate()) {
+            $scope.schedule.push(game);
+          }
+        });
+      })
+      .error(function (data) {
+        console.log(data);
+      });
+    url = url_root + (date.getMonth() + 2);
+    $http.get(url)
+      .success(function (data) {
+        $scope.schedule.push.apply($scope.schedule, data);
       })
       .error(function (data) {
         console.log(data);

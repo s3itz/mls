@@ -73,7 +73,7 @@
         <h3>Schedule</h3>
         <ul class="list-group row" ng-controller="ScheduleCtrl">
           <li class="list-group-item row col-md-6 col-lg-12" ng-repeat="game in schedule">
-            <div class="col-xs-12 text-muted text-center">{{ game.time | date:'EEEE, MMMM d, h:mm a' }}</div>
+            <div class="col-xs-12 text-muted text-center">{{ game.time | date:'EEEE, MMMM d, h:mm a' }} EST</div>
             <div class="row col-xs-12">
               <span class="col-xs-4 tex-left">{{ game.home_team }}</span>
               <span class="col-xs-4 text-center">{{ game.home_score }}-{{ game.away_score }}</span>
