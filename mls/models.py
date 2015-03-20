@@ -63,6 +63,7 @@ class ClubStanding(Base):
             'goals_against': self.goals_against,
             'goals_difference': self.goals_difference,
             'home_goals_for': self.home_goals_for,
+            'home_goals_difference': self.home_goals_difference,
             'road_goals': self.road_goals,
             'road_goals_difference': self.road_goals_difference,
             'conference_id': self.conference_id
