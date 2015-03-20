@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" ng-app="mlsAggregator">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <title>MLS Aggregator Example</title>
+  <link rel="stylesheet"
+        href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+</head>
+<body>
+  {% raw %}
+  <main class="container">
+    <div class="standings" ng-controller="StandingsCtrl">
+    <div class="panel panel-default" ng-repeat="conference in standings">
+      <div class="panel-heading">{{ conference.name }}</div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Club</th>
+            <th>PTS</th>
+            <th>GP</th>
+            <th>PPG</th>
+            <th>W</th>
+            <th>L</th>
+            <th>T</th>
+            <th>GF</th>
+            <th>GA</th>
+            <th>GD</th>
+            <th>HG</th>
+            <th>HGD</th>
+            <th>RG</th>
+            <th>RGD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="club in conference.clubs">
+            <td>{{ club.rank }}</td>
+            <td>{{ club.name }}</td>
+            <td>{{ club.points }}</td>
+            <td>{{ club.games_played }}</td>
+            <td>{{ club.points_per_game }}</td>
+            <td>{{ club.wins }}</td>
+            <td>{{ club.losses }}</td>
+            <td>{{ club.ties }}</td>
+            <td>{{ club.goals_for }}</td>
+            <td>{{ club.goals_against }}</td>
+            <td>{{ club.goals_difference }}</td>
+            <td>{{ club.home_goals_for }}</td>
+            <td>{{ club.home_goals_difference }}</td>
+            <td>{{ club.road_goals }}</td>
+            <td>{{ club.road_goals_difference }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </main>
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  {% endraw %}
+  <script src="{{ url_for('static', filename='controllers.js') }}"></script>
+</body>
+</html>
