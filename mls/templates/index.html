@@ -11,8 +11,8 @@
 <body>
   {% raw %}
   <main class="container">
-    <div class="row">
-      <div id="standings-accordion" class="panel-group col-md-12 col-lg-6" ng-controller="StandingsCtrl">
+    <div class="row well">
+      <div id="standings-accordion" class="panel-group col-md-12 col-lg-6 col-lg-push-6" ng-controller="StandingsCtrl">
         <h3>Standings</h3>
         <div class="panel panel-default" ng-repeat="conference in standings">
           <div class="panel-heading">
@@ -53,15 +53,15 @@
         </div>
       </div>
 
-      <div class="col-md-12 col-lg-6">
+      <div class="col-md-12 col-lg-6 col-lg-pull-6">
         <h3>Schedule</h3>
-        <ul class="list-group" ng-controller="ScheduleCtrl">
-          <li class="list-group-item row" ng-repeat="game in schedule">
-            <div class="col-xs-12">{{ game.time | date:'EEEE, MMMM d, h:mm a' }}</div>
-            <div class="row">
-            <span class="col-xs-5 tex-left">{{ game.home_team }}</span>
-            <span class="col-xs-2 text-center">{{ game.home_score }}-{{ game.away_score }}</span>
-            <span class="col-xs-5 text-right">{{ game.away_team }}</span>
+        <ul class="list-group row" ng-controller="ScheduleCtrl">
+          <li class="list-group-item row col-md-6 col-lg-12" ng-repeat="game in schedule">
+            <div class="col-xs-12 text-muted text-center">{{ game.time | date:'EEEE, MMMM d, h:mm a' }}</div>
+            <div class="row col-xs-12">
+              <span class="col-xs-5 tex-left">{{ game.home_team }}</span>
+              <span class="col-xs-2 text-center">{{ game.home_score }}-{{ game.away_score }}</span>
+              <span class="col-xs-5 text-right">{{ game.away_team }}</span>
             </div>
           </li>
         </ul>

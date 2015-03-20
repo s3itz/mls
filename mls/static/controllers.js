@@ -16,11 +16,9 @@
   app.controller('ScheduleCtrl', function ($scope, $http) {
     var date = new Date();
     var url = '/schedule/2015/' + (date.getMonth() + 1);
-    console.log(url);
     $http.get(url)
       .success(function (data) {
         $scope.schedule = data;
-        console.log($scope.schedule)
       })
       .error(function (data) {
         console.log(data);
