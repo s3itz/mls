@@ -11,50 +11,61 @@
 <body>
   {% raw %}
   <main class="container">
-    <div class="standings" ng-controller="StandingsCtrl">
-    <div class="panel panel-default" ng-repeat="conference in standings">
-      <div class="panel-heading">{{ conference.name }}</div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Club</th>
-            <th>PTS</th>
-            <th>GP</th>
-            <th>PPG</th>
-            <th>W</th>
-            <th>L</th>
-            <th>T</th>
-            <th>GF</th>
-            <th>GA</th>
-            <th>GD</th>
-            <th>HG</th>
-            <th>HGD</th>
-            <th>RG</th>
-            <th>RGD</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="club in conference.clubs">
-            <td>{{ club.rank }}</td>
-            <td>{{ club.name }}</td>
-            <td>{{ club.points }}</td>
-            <td>{{ club.games_played }}</td>
-            <td>{{ club.points_per_game }}</td>
-            <td>{{ club.wins }}</td>
-            <td>{{ club.losses }}</td>
-            <td>{{ club.ties }}</td>
-            <td>{{ club.goals_for }}</td>
-            <td>{{ club.goals_against }}</td>
-            <td>{{ club.goals_difference }}</td>
-            <td>{{ club.home_goals_for }}</td>
-            <td>{{ club.home_goals_difference }}</td>
-            <td>{{ club.road_goals }}</td>
-            <td>{{ club.road_goals_difference }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="row">
+      <div id="standings-accordion" class="panel-group col-md-12 col-lg-6" ng-controller="StandingsCtrl">
+        <h3>Standings</h3>
+        <div class="panel panel-default" ng-repeat="conference in standings">
+          <div class="panel-heading">
+            <div data-toggle="collapse"
+                 data-parent="#standings-accordion"
+                 href="#{{ conference.id }}">{{ conference.name }}
+            </div>
+          </div>
+          <div class="panel-collapse collapse" id="{{ conference.id }}">
+            <table class="table table-striped table-condensed">
+            <thead>
+              <tr>
+                <th>#</th><th>Club</th><th>PTS</th><th>GP</th><th>PPG</th><th>W</th><th>L</th><th>T</th><th>GF</th>
+                <th>GA</th><th>GD</th><th>HG</th><th>HGD</th><th>RG</th><th>RGD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="club in conference.clubs">
+                <td>{{ club.rank }}</td>
+                <td>{{ club.name }}</td>
+                <td>{{ club.points }}</td>
+                <td>{{ club.games_played }}</td>
+                <td>{{ club.points_per_game }}</td>
+                <td>{{ club.wins }}</td>
+                <td>{{ club.losses }}</td>
+                <td>{{ club.ties }}</td>
+                <td>{{ club.goals_for }}</td>
+                <td>{{ club.goals_against }}</td>
+                <td>{{ club.goals_difference }}</td>
+                <td>{{ club.home_goals_for }}</td>
+                <td>{{ club.home_goals_difference }}</td>
+                <td>{{ club.road_goals }}</td>
+                <td>{{ club.road_goals_difference }}</td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-lg-6">
+        <h3>Schedule</h3>
+        <ul class="list-group" ng-controller="ScheduleCtrl">
+          <li class="list-group-item row" ng-repeat="game in schedule">
+            <div class="col-xs-12">{{ game.time | date:'EEEE, MMMM d, h:mm a' }}</div>
+            <div class="row">
+            <span class="col-xs-5 tex-left">{{ game.home_team }}</span>
+            <span class="col-xs-2 text-center">{{ game.home_score }}-{{ game.away_score }}</span>
+            <span class="col-xs-5 text-right">{{ game.away_team }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </main>
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
