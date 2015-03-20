@@ -22,7 +22,6 @@
         $scope.schedule = [];
         angular.forEach(data, function(game) {
           var today = new Date();
-          console.log('today:', today);
           var gameDate = new Date(game.time);
 
           // games are stored in Eastern time; getUTCDate will give us that
