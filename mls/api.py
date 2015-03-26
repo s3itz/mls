@@ -9,38 +9,23 @@ from mls.models import ScheduledGame, Conference, ClubStanding
 
 @app.route('/schedule')
 @app.route('/schedule/<int:year>')
-@app.route('/schedule/<int:year>/<month>')
+@app.route('/schedule/<int:year>/<int:month>')
 def schedule(year=None, month='all'):
     games = session.query(ScheduledGame)
 
     if not year:
         year = datetime.datetime.now().year
 
-    if year not in [2014, 2015]:
-        message = '{} is an invalid year for requests.'.format(year)
-        data = json.dumps({'message': message})
-        return Response(data, 404, mimetype='application/json')
-
     games = games.filter(extract('year', ScheduledGame.time) == year)
 
     if month != 'all':
-        try:
-            month = int(month)
-        except ValueError:
-            message = 'Invalid month provided: {}'.format(month)
-            data = json.dumps({'message': message})
-            return Response(data, 404, mimetype='application/josn')
-        else:
-            games = games.filter(extract('month', ScheduledGame.time) == month)
-
-    games = games.all()
+        games = games.filter(extract('month', ScheduledGame.time) == month)
 
     data = json.dumps([game.as_dictionary() for game in games])
     return Response(data, 200, mimetype='application/json')
 
 
 @app.route('/standings')
-@app.route('/standings/all')
 @app.route('/standings/<conference>')
 def standings(conference='all'):
     """Returns a response with conference standings.
@@ -53,7 +38,7 @@ def standings(conference='all'):
         conference = conference.title() + ' Conference'
 
         if conference not in ['Eastern Conference', 'Western Conference']:
-            message = 'Couldnot find {} conference'.format(conference)
+            message = 'Could not find {} conference'.format(conference)
             data = json.dumps({'message': message})
             return Response(data, 404, mimetype='application/json')
 
